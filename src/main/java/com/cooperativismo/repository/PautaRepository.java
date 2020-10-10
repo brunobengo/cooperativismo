@@ -1,7 +1,9 @@
-package com.example.cooperativismo.repository;
+package com.cooperativismo.repository;
 
-import com.example.cooperativismo.document.Pauta;
+import com.cooperativismo.model.Pauta;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface PautaRepository extends MongoRepository<Pauta, String> {
 }

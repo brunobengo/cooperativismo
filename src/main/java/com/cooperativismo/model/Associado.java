@@ -1,20 +1,27 @@
-package com.example.cooperativismo.document;
+package com.cooperativismo.model;
 
-import org.springframework.data.mongodb.core.mapping.Document;
+import lombok.*;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
+import javax.persistence.Id;
+import java.io.Serializable;
 
-@Document
-public class Associado {
+@EqualsAndHashCode
+@AllArgsConstructor
+//@NoArgsConstructor
+@Getter
+@Setter
+@Builder
+public class Associado implements Serializable {
 
     @Id
     private String id;
-
-    @NotBlank
     private String cpf;
-
     private boolean habilitacaoParaVoto;
+
+    public Associado(){}
+    public Associado(String cpf){
+        this.cpf = cpf;
+    }
 
     public String getId() {
         return id;
@@ -28,8 +35,9 @@ public class Associado {
         return cpf;
     }
 
-    public void setCpf(String cpf) {
+    public Associado setCpf(String cpf) {
         this.cpf = cpf;
+        return this;
     }
 
     public boolean isHabilitacaoParaVoto() {
