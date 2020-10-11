@@ -1,11 +1,14 @@
 package com.cooperativismo.controller;
 
-import com.cooperativismo.enums.Voto;
+import com.cooperativismo.dto.ResultadoVotacaoDTO;
+import com.cooperativismo.dto.VotoDTO;
 import com.cooperativismo.service.VotoAssembleiaService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/cooperativismo/voto")
+@RequestMapping("/voto")
 public class VotoAssembleiaController {
 
     private final VotoAssembleiaService votoAssembleiaService;
@@ -14,9 +17,14 @@ public class VotoAssembleiaController {
         this.votoAssembleiaService = votoAssembleiaService;
     }
 
-    @PostMapping("/novovoto")
-    public void novovoto(@PathVariable String idPauta, @PathVariable String idAssociado,
-                                   @PathVariable boolean confirma) {
-        votoAssembleiaService.adicionaVoto(idPauta, idAssociado, confirma? Voto.SIM : Voto.NÃO);
+    @PostMapping(path = "/novovoto", consumes = "application/json")
+    public ResponseEntity novovoto(@Validated @RequestBody VotoDTO votoDTO) {
+        votoAssembleiaService.adicionaVoto(votoDTO);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping(path = "/{id}/resultado", produces = "application/json")
+    public ResponseEntity<ResultadoVotacaoDTO> resultado(@PathVariable String id) {
+        return ResponseEntity.ok(votoAssembleiaService.totalVotos(id));
     }
 }

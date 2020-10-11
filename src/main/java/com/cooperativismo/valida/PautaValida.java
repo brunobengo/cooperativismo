@@ -1,4 +1,4 @@
-package com.cooperativismo.negocio;
+package com.cooperativismo.valida;
 
 import com.cooperativismo.model.Pauta;
 import com.cooperativismo.service.AssociadoService;
@@ -24,7 +24,7 @@ public class PautaValida implements Valida {
 
     @Override
     public boolean valida() {
-        Pauta pauta = pautaService.find(idPauta);
+        Pauta pauta = pautaService.findById(idPauta);
         return pauta.isSessaoAberta();
     }
 }

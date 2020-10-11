@@ -1,14 +1,18 @@
 package com.cooperativismo.service;
 
+import com.cooperativismo.dto.VotoDTO;
 import com.cooperativismo.enums.Voto;
 import com.cooperativismo.model.VotoAssembleia;
-import com.cooperativismo.negocio.VotoAssembleiaValida;
+import com.cooperativismo.dto.ResultadoVotacaoDTO;
+import com.cooperativismo.valida.VotoAssembleiaValida;
 import com.cooperativismo.repository.VotoAssembleiaRepository;
 import org.mockito.InjectMocks;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
+import static java.util.stream.Collectors.groupingBy;
 
 @Service
 public class VotoAssembleiaService {
@@ -36,16 +40,20 @@ public class VotoAssembleiaService {
         return votoAssembleiaRepository.existeVotoDoAssociadoNaPauta(idAssociado, idPauta);
     }
 
-    public void adicionaVoto(String idPauta, String idAssociado, Voto voto){
+    public void adicionaVoto(VotoDTO votoDTO){
         VotoAssembleiaValida votoAssembleiaValida =
-                new VotoAssembleiaValida(this, associadoService, pautaSevice, idPauta, idAssociado);
+                new VotoAssembleiaValida(this, associadoService, pautaSevice, votoDTO);
         if(votoAssembleiaValida.valida()){
             VotoAssembleia votoAssembleia = new VotoAssembleia();
-            votoAssembleia.setIdPauta(idPauta);
-            votoAssembleia.setIdAssociado(idAssociado);
+            votoAssembleia.setIdPauta(votoDTO.getIdPauta());
+            votoAssembleia.setIdAssociado(votoDTO.getIdAssociado());
             votoAssembleia.setHorarioVoto(LocalDateTime.now());
-            votoAssembleia.setVoto(voto == Voto.SIM ? "Sim" : "Não");
+            votoAssembleia.setVoto(votoDTO.getVoto() == Voto.SIM ? "Sim" : "Não");
             save(votoAssembleia);
         }
+    }
+
+    public ResultadoVotacaoDTO totalVotos(String idPauta){
+        return votoAssembleiaRepository.totalvotos(idPauta);
     }
 }

@@ -1,9 +1,8 @@
 package com.cooperativismo.repository;
 
-import com.cooperativismo.model.VotoAssembleia;
+import com.cooperativismo.dto.ResultadoVotacaoDTO;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 public interface VotoAssembleiaRepositoryQuery {
 
@@ -11,5 +10,5 @@ public interface VotoAssembleiaRepositoryQuery {
 
     LocalDateTime horarioUltimaVotacao(String idPauta);
 
-    List<VotoAssembleia> totalvotos(String idPauta);
+    ResultadoVotacaoDTO totalvotos(String idPauta);
 }

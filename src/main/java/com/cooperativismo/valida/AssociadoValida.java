@@ -1,4 +1,4 @@
-package com.cooperativismo.negocio;
+package com.cooperativismo.valida;
 
 import com.cooperativismo.enums.HabilitacaoParaVoto;
 import com.cooperativismo.externo.HabiitacaoVoto;

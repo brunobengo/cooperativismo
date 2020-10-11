@@ -1,8 +1,9 @@
 package com.cooperativismo.service;
 
+import com.cooperativismo.dto.IniciaPautaDTO;
 import com.cooperativismo.model.Pauta;
 import com.cooperativismo.repository.PautaRepository;
-import com.cooperativismo.repository.VotoAssembleiaRepositoryQueryImpl;
+import com.cooperativismo.repository.VotoAssembleiaRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -11,9 +12,11 @@ import java.time.LocalDateTime;
 public class PautaService {
 
     private final PautaRepository pautaRepository;
+    private final VotoAssembleiaRepository votoAssembleiaRepository;
 
-    public PautaService(PautaRepository pautaRepository) {
+    public PautaService(PautaRepository pautaRepository, VotoAssembleiaRepository votoAssembleiaRepository) {
         this.pautaRepository = pautaRepository;
+        this.votoAssembleiaRepository = votoAssembleiaRepository;
     }
 
     public Pauta save(Pauta pauta) {
@@ -24,9 +27,9 @@ public class PautaService {
         return pautaRepository.findById(id).get();
     }
 
-    public Pauta abreSessaoDeVotacao(String idPauta, int minutosDeDuracaoDaSessao) {
-        Pauta pauta = findById(idPauta);
-        pauta.setMinutosDeDuracaoDaSessao(minutosDeDuracaoDaSessao);
+    public Pauta iniciaPauta(IniciaPautaDTO iniciaPautaDTO) {
+        Pauta pauta = findById(iniciaPautaDTO.getIdPauta());
+        pauta.setMinutosDeDuracaoDaSessao(iniciaPautaDTO.getDuracao());
         pauta.setHoraAberturaAssembleia(LocalDateTime.now());
         pauta.setStatusSessao(true);
         save(pauta);
@@ -34,10 +37,8 @@ public class PautaService {
     }
 
     private boolean isInativa(Pauta pauta) {
-//        VotoAssembleiaRepositoryQueryImpl votoAssembleiaRepositoryQueryImpl = new VotoAssembleiaRepositoryQueryImpl();
-//        LocalDateTime horarioUltimaVotacao = votoAssembleiaRepositoryQueryImpl.horarioUltimaVotacao(pauta.getId());
-//        return LocalDateTime.now().minusMinutes(1).isAfter(horarioUltimaVotacao);
-        return false;
+        LocalDateTime horarioUltimaVotacao = votoAssembleiaRepository.horarioUltimaVotacao(pauta.getId());
+        return LocalDateTime.now().minusMinutes(1).isAfter(horarioUltimaVotacao);
     }
 
     private boolean isJaFechou(Pauta pauta) {

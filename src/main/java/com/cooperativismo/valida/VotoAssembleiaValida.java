@@ -1,6 +1,6 @@
-package com.cooperativismo.negocio;
+package com.cooperativismo.valida;
 
-import com.cooperativismo.model.Pauta;
+import com.cooperativismo.dto.VotoDTO;
 import com.cooperativismo.service.AssociadoService;
 import com.cooperativismo.service.PautaService;
 import com.cooperativismo.service.VotoAssembleiaService;
@@ -14,12 +14,12 @@ public class VotoAssembleiaValida implements Valida{
 
     public VotoAssembleiaValida(VotoAssembleiaService votoAssembleiaService,
                                 AssociadoService associadoService, PautaService pautaService,
-                                String idPauta, String idAssociado) {
+                                VotoDTO votoDTO) {
         this.votoAssembleiaService = votoAssembleiaService;
         this.associadoService = associadoService;
         this.pautaService = pautaService;
-        this.idPauta = idPauta;
-        this.idAssociado = idAssociado;
+        this.idPauta = votoDTO.getIdPauta();
+        this.idAssociado = votoDTO.getIdAssociado();
     }
 
     @Override

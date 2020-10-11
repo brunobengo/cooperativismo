@@ -1,15 +1,18 @@
 package com.cooperativismo.repository;
 
-
 import com.cooperativismo.model.VotoAssembleia;
+import com.cooperativismo.dto.ResultadoVotacaoDTO;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.*;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
+import static java.util.stream.Collectors.groupingBy;
 
 public class VotoAssembleiaRepositoryQueryImpl implements VotoAssembleiaRepositoryQuery{
 
@@ -36,45 +39,32 @@ public class VotoAssembleiaRepositoryQueryImpl implements VotoAssembleiaReposito
 
     @Override
     public LocalDateTime horarioUltimaVotacao(String idPauta) {
-        //        pegar o date time da última votacao
+//        pegar o date time da última votacao
 //            pegar votacoes, filtrar pela última
 //        List<VotoAssembleia> listHorarioUltimaVotacao = mongoTemplate.find(
 //            Query.query(
 //                Criteria.where("votoassembleia.idpauta").is(new ObjectId(idPauta))
-//            ).with(new Sort(Sort.Direction.DESC, "votoassembleia.horarioVoto"))
+//            )
 //            ,VotoAssembleia.class
 //        );
         return null;
     }
 
     @Override
-    public List<VotoAssembleia> totalvotos(String idPauta) {
-//        Aggregation agg = new Aggregation(
-//
-//                unwind("voto"),
-//                project("_id")
-//                        .and("details.student._id").as("sid")
-//                        .and("details.studentStatus.statusCode").as("statuscode"),
-//                group("sid", "statuscode")
-//                        .count().as("total");
-//        List<VotoAssembleia> listVotoAssembleia = mongoTemplate
-//                .aggregate(agg, "votoassembleia", VotoAssembleia.class);   .
-//            .group(
-//                    Criteria.where("votoassembleia.idpauta").is(new ObjectId(idPauta)),
-//                    "votoassembleia",
-//                        GroupBy.key("voto"),
-//                    .class,
-//
-//            )
-//
-//
-//
-//                find(
-//            Query.query(
-//                Criteria.where("votoassembleia.idpauta").is(new ObjectId(idPauta))
-//            ).,
-//            VotoAssembleia.class
-//        );
-        return null;
+    public ResultadoVotacaoDTO totalvotos(String idPauta) {
+        MatchOperation match = new MatchOperation(Criteria.where("idpauta").is(new ObjectId(idPauta)));
+        GroupOperation group = Aggregation.group("voto").count().as("total");
+        Aggregation aggregate = Aggregation.newAggregation(match, group);
+
+        AggregationResults<VotoAssembleia> orderAggregate = mongoTemplate.aggregate(aggregate,
+                "votoassembleia", VotoAssembleia.class);
+
+        ResultadoVotacaoDTO ResultadoVotacaoDTO = new ResultadoVotacaoDTO() ;
+        ResultadoVotacaoDTO.setVotosSim(orderAggregate.getRawResults().getInteger("sim"));
+        ResultadoVotacaoDTO.setVotosNao(orderAggregate.getRawResults().getInteger("não"));
+
+        return ResultadoVotacaoDTO;
     }
+
+
 }

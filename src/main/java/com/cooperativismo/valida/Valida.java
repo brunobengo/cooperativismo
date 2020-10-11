@@ -1,4 +1,4 @@
-package com.cooperativismo.negocio;
+package com.cooperativismo.valida;
 
 public interface Valida {
 

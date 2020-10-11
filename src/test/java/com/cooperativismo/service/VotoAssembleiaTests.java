@@ -1,5 +1,7 @@
 package com.cooperativismo.service;
 
+import com.cooperativismo.dto.IniciaPautaDTO;
+import com.cooperativismo.dto.VotoDTO;
 import com.cooperativismo.enums.Voto;
 import com.cooperativismo.model.Associado;
 import com.cooperativismo.model.Pauta;
@@ -26,6 +28,8 @@ public class VotoAssembleiaTests {
     @InjectMocks
     private PautaService pautaService;
 
+    private static final String id = "id";
+
     private static VotoAssembleia votoAssembleiaMock;
 
     @Test
@@ -40,9 +44,13 @@ public class VotoAssembleiaTests {
     @Test
     public void testVotacao() throws Exception {
         Pauta pauta = pautaService
-                .abreSessaoDeVotacao(new Pauta("Altera procedimento").getId(), 1);
+                .iniciaPauta(new IniciaPautaDTO().setIdPauta(id).setDuracao(1));
         Associado associado = new Associado("1220233222");
-        votoAssembleiaService.adicionaVoto(pauta.getId(), associado.getId(), Voto.SIM);
+        VotoDTO votoDTO = new VotoDTO()
+                .setIdAssociado("2020203")
+                .setIdPauta("id")
+                .setVoto(Voto.SIM);
+        votoAssembleiaService.adicionaVoto(votoDTO);
     }
 
     private void assertTrue(boolean resultadoObtido){
