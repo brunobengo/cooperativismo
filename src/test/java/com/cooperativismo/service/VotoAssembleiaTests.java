@@ -1,5 +1,6 @@
 package com.cooperativismo.service;
 
+import com.cooperativismo.enums.Voto;
 import com.cooperativismo.model.Associado;
 import com.cooperativismo.model.Pauta;
 import com.cooperativismo.model.VotoAssembleia;
@@ -22,6 +23,8 @@ public class VotoAssembleiaTests {
     private VotoAssembleiaRepository votoAssembleiaRepository;
     @InjectMocks
     private VotoAssembleiaService votoAssembleiaService;
+    @InjectMocks
+    private PautaService pautaService;
 
     private static VotoAssembleia votoAssembleiaMock;
 
@@ -35,24 +38,11 @@ public class VotoAssembleiaTests {
 
 //    by Bruno
     @Test
-    public void testSalva(){
-        Pauta pauta = new Pauta();
-        pauta.setDescricao("Altera procedimento");
-        pauta.abreSessao(1);
-        Associado associado1 = new Associado("32457834432");
-        VotoAssembleia votoAssembleia = new VotoAssembleia();
-        votoAssembleia.adicionaVoto(pauta.getId(), associado1.getId(), VotoAssembleia.Voto.SIM);
-        votoAssembleiaService.save(votoAssembleia); //TODO qual assert utilizar?
-    }
-
-    @Test
-    public void testVotacao(){
-        Pauta pauta = new Pauta("Altera procedimento");
-        pauta.abreSessao(1);
+    public void testVotacao() throws Exception {
+        Pauta pauta = pautaService
+                .abreSessaoDeVotacao(new Pauta("Altera procedimento").getId(), 1);
         Associado associado = new Associado("1220233222");
-
-        VotoAssembleia votoAssembleia = new VotoAssembleia();
-        votoAssembleia.adicionaVoto(pauta.getId(), associado.getId(), VotoAssembleia.Voto.SIM);
+        votoAssembleiaService.adicionaVoto(pauta.getId(), associado.getId(), Voto.SIM);
     }
 
     private void assertTrue(boolean resultadoObtido){

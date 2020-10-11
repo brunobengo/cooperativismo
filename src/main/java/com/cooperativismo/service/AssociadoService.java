@@ -15,4 +15,8 @@ public class AssociadoService {
     public Associado save(Associado associado){
         return associadoRepository.save(associado);
     }
+
+    public Associado find(String idAssociado) {
+        return associadoRepository.findById(idAssociado).get();
+    }
 }

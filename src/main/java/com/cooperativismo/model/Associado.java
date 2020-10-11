@@ -18,8 +18,10 @@ public class Associado implements Serializable {
     private String cpf;
     private boolean habilitacaoParaVoto;
 
-    public Associado(){}
-    public Associado(String cpf){
+    public Associado() {
+    }
+
+    public Associado(String cpf) {
         this.cpf = cpf;
     }
 

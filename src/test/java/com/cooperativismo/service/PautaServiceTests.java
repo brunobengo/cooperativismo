@@ -24,6 +24,8 @@ public class PautaServiceTests {
 
     private static Pauta pautaMock;
 
+    private static final String test_idPauta = "isPauta";
+
     @BeforeAll
     public static void setUp() {
         pautaMock = new Pauta()
@@ -48,20 +50,18 @@ public class PautaServiceTests {
 
     @Test
     public void testAbreSecaoVotacao() throws InterruptedException {
-        Pauta pauta = new Pauta();
-        pauta.setDescricao("Altera procedimento");
-        pauta.abreSessao(60);
-        assertTrue(pauta.isAberta());
+        pautaService.save(pautaMock);
+        pautaService.abreSessaoDeVotacao(pautaMock.getId(), 1);
+        assertTrue(pautaService.isAberta(pautaMock.getId()));
    }
 
    @Test
     public void testFechamentoSecaoTempoDeterminado() throws InterruptedException {
-        Pauta pauta = new Pauta();
-        pauta.setDescricao("Altera procedimento");
-        pauta.abreSessao(1);
-        assertTrue(pauta.isAberta());
+        Pauta pauta = pautaService.save(new Pauta("Alterar relatório"));
+        pautaService.abreSessaoDeVotacao(pauta.getId(), 1);
+        assertTrue(pautaService.isAberta(pauta.getId()));
         Thread.sleep(60000);
-        assertFalse(pauta.isAberta());
+        assertFalse(pautaService.isAberta(pauta.getId()));
     }
 
 //    public void testFechamentoSecaoInatividade() throws InterruptedException {

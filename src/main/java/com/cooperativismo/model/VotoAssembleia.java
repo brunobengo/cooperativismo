@@ -9,22 +9,6 @@ import java.time.LocalDateTime;
 @Document
 public class VotoAssembleia {
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getIdAssociado() {
-        return idAssociado;
-    }
-
-    public void setHorarioVoto(LocalDateTime horarioVoto) {
-        this.horarioVoto = horarioVoto;
-    }
-
-    public enum Voto  {
-        SIM, NAO;
-    }
-
     @Id
     private String id;
 
@@ -37,6 +21,18 @@ public class VotoAssembleia {
     private String voto;
 
     private LocalDateTime horarioVoto;
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getIdAssociado() {
+        return idAssociado;
+    }
+
+    public void setHorarioVoto(LocalDateTime horarioVoto) {
+        this.horarioVoto = horarioVoto;
+    }
 
     public String getId() {
         return id;
@@ -62,16 +58,8 @@ public class VotoAssembleia {
         return voto;
     }
 
-    private void setVoto(String voto) {
+    public void setVoto(String voto) {
         this.voto = voto;
-    }
-
-    public void adicionaVoto(String idPauta, String idAssociado, Voto voto) {
-        this.setHorarioVoto(LocalDateTime.now());
-        if(voto == Voto.SIM)
-            setVoto("Sim");
-        else
-            setVoto("Não");
     }
 
     public LocalDateTime getHorarioVoto() {

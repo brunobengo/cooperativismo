@@ -24,25 +24,25 @@ public class DummyData {
     VotoAssembleiaService votoAssembleiaService;
 
 
-//    @PostConstruct
-    public void saveAssociado(){
-        Associado associado = new Associado();
-        associado.setCpf("02692471067");
-        associadoService.save(associado);
-    }
-//    @PostConstruct
-    public void savePauta(){
-        Pauta pauta = new Pauta();
-        pauta.setDescricao("Nome da rua Tal");
-        pauta.abreSessao(60);
-        pautaService.save(pauta);
-    }
-//    @PostConstruct
-    public void saveVoto(){
-        VotoAssembleia votoAssembleia = new VotoAssembleia();
-        votoAssembleia.adicionaVoto("5f813591752e4529ce477083",
-                "asdhada123iadji12312",
-                VotoAssembleia.Voto.SIM);
-        votoAssembleiaService.save(votoAssembleia);
-    }
+////    @PostConstruct
+//    public void saveAssociado(){
+//        Associado associado = new Associado();
+//        associado.setCpf("02692471067");
+//        associadoService.save(associado);
+//    }
+////    @PostConstruct
+//    public void savePauta(){
+//        Pauta pauta = new Pauta();
+//        pauta.setDescricao("Nome da rua Tal");
+//        pauta.abreSessao(60);
+//        pautaService.save(pauta);
+//    }
+////    @PostConstruct
+//    public void saveVoto(){
+//        VotoAssembleia votoAssembleia = new VotoAssembleia();
+//        votoAssembleia.adicionaVoto("5f813591752e4529ce477083",
+//                "asdhada123iadji12312",
+//                Voto.SIM);
+//        votoAssembleiaService.save(votoAssembleia);
+//    }
 }
