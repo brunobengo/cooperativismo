@@ -50,9 +50,10 @@ public class PautaServiceTests {
 
     @Test
     public void testAbreSecaoVotacao() throws InterruptedException {
-        pautaService.save(pautaMock);
-        pautaService.abreSessaoDeVotacao(pautaMock.getId(), 1);
-        assertTrue(pautaService.isAberta(pautaMock.getId()));
+        when(pautaRepository.save(eq(pautaMock))).thenReturn(pautaMock);//porque precisa disso.
+        Pauta pauta = pautaService.save(pautaMock); //TODO verificar como testar isso, precisa do id
+        pautaService.abreSessaoDeVotacao(pauta.getId(), 1);
+        assertTrue(pautaService.isAberta(pauta.getId()));
    }
 
    @Test
@@ -63,19 +64,6 @@ public class PautaServiceTests {
         Thread.sleep(60000);
         assertFalse(pautaService.isAberta(pauta.getId()));
     }
-
-//    public void testFechamentoSecaoInatividade() throws InterruptedException {
-//        Pauta pauta = new Pauta();
-//        pauta.setDescricao("Altera procedimento");
-//        pauta.abreSessao(60);
-//        assertTrue(pauta.isAberta());
-//        Associado associado1 = new Associado();
-//        associado1.setCpf("1220233222");
-//
-//
-//        Thread.sleep(60000);
-//        assertFalse(pauta.isAberta());
-//    }
 
     private void assertTrue(boolean resultadoObtido){
         assertEquals(true, resultadoObtido);

@@ -38,7 +38,6 @@ public class AssociadoTests {
         verify(associadoRepository).save(eq(associadoMock));
     }
 
-
 //  by Bruno
     @Test
     public void testSalva(){

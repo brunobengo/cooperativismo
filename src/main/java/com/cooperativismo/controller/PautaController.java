@@ -2,18 +2,10 @@ package com.cooperativismo.controller;
 
 import com.cooperativismo.model.Pauta;
 import com.cooperativismo.service.PautaService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-import java.net.URI;
-
-@RequestMapping("/pauta")
 @RestController
+@RequestMapping("/cooperativismo/pauta")
 public class PautaController {
     private final PautaService pautaService;
 
@@ -21,23 +13,15 @@ public class PautaController {
         this.pautaService = pautaService;
     }
 
-    @PostMapping(path = "novapauta", consumes = "application/json")
-    public ResponseEntity criaPauta(@Valid Pauta pauta){
-        String id = pautaService.save(pauta).getId();
-
-        URI location = UriComponentsBuilder.fromUriString("pauta")
-                .path("/{id}").buildAndExpand(id).toUri();
-        return ResponseEntity.created(location).build();
+    @PostMapping("/novapauta")
+    public Pauta novapauta(@RequestBody Pauta novaPauta){
+        return pautaService.save(novaPauta);
     }
 
-    @PostMapping(path = "iniciavotacao", consumes = "application/json")
-    public ResponseEntity iniciaVotacao(@PathVariable String id, @PathVariable int duracao){
-        pautaService.abreSessaoDeVotacao(id, duracao);
-
-        URI location = UriComponentsBuilder.fromUriString("pauta")
-                .path("/{id}").buildAndExpand(id).toUri();
-        return ResponseEntity.created(location).build();
-
+    @PutMapping("/iniciavotacao/{id}")
+    public Pauta iniciavotacao(@RequestBody Pauta newPauta, @PathVariable String idPauta, @PathVariable int duracao){
+        return pautaService.abreSessaoDeVotacao(idPauta, duracao);
+            //TODO ver o que é ResponseEntity
     }
 
 }

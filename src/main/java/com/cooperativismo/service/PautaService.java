@@ -16,14 +16,16 @@ public class PautaService {
         this.pautaRepository = pautaRepository;
     }
 
-    public Pauta save(Pauta pauta){ return pautaRepository.save(pauta); }
+    public Pauta save(Pauta pauta) {
+        return pautaRepository.save(pauta);
+    }
 
-    public Pauta find(String id){
+    public Pauta findById(String id) {
         return pautaRepository.findById(id).get();
     }
 
     public Pauta abreSessaoDeVotacao(String idPauta, int minutosDeDuracaoDaSessao) {
-        Pauta pauta = find(idPauta);
+        Pauta pauta = findById(idPauta);
         pauta.setMinutosDeDuracaoDaSessao(minutosDeDuracaoDaSessao);
         pauta.setHoraAberturaAssembleia(LocalDateTime.now());
         pauta.setStatusSessao(true);
@@ -31,21 +33,23 @@ public class PautaService {
         return pauta;
     }
 
-    private boolean isInativa(Pauta pauta){
-        VotoAssembleiaRepositoryQueryImpl votoAssembleiaRepositoryQueryImpl = new VotoAssembleiaRepositoryQueryImpl();
-        LocalDateTime horarioUltimaVotacao = votoAssembleiaRepositoryQueryImpl.horarioUltimaVotacao(pauta.getId());
-        return LocalDateTime.now().minusMinutes(1).isAfter(horarioUltimaVotacao);
+    private boolean isInativa(Pauta pauta) {
+//        VotoAssembleiaRepositoryQueryImpl votoAssembleiaRepositoryQueryImpl = new VotoAssembleiaRepositoryQueryImpl();
+//        LocalDateTime horarioUltimaVotacao = votoAssembleiaRepositoryQueryImpl.horarioUltimaVotacao(pauta.getId());
+//        return LocalDateTime.now().minusMinutes(1).isAfter(horarioUltimaVotacao);
+        return false;
     }
-    private boolean isJaFechou(Pauta pauta){
+
+    private boolean isJaFechou(Pauta pauta) {
         LocalDateTime momentoDeFechamentoDaSecao =
                 pauta.getHoraAberturaAssembleia().plusMinutes(pauta.getMinutosDeDuracaoDaSessao());
         return LocalDateTime.now().isAfter(momentoDeFechamentoDaSecao);
     }
 
     public boolean isAberta(String idPauta) {
-        Pauta pauta = find(idPauta);
-        if(pauta.isSessaoAberta()){
-            if(isJaFechou(pauta) || isInativa(pauta)) {
+        Pauta pauta = findById(idPauta);
+        if (pauta.isSessaoAberta()) {
+            if (isJaFechou(pauta) || isInativa(pauta)) {
                 pauta.setStatusSessao(false);
                 save(pauta);
             }

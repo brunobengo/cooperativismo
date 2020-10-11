@@ -1,5 +1,6 @@
 package com.cooperativismo.negocio;
 
+import com.cooperativismo.enums.HabilitacaoParaVoto;
 import com.cooperativismo.externo.HabiitacaoVoto;
 import com.cooperativismo.model.Associado;
 import com.cooperativismo.service.AssociadoService;
@@ -25,26 +26,19 @@ public class AssociadoValida implements Valida {
 
     @Override
     public boolean valida() {
-        if(associadoNaoHabilitadoParaVoto()){
-            return false;
-        }else if(associadoJaVotouNaPauta()){
-            return false;
-        }
-        return true;
+        return associadoHabilitadoParaVoto() && associadoDisponivelParaPauta();
     }
 
-    private boolean associadoNaoHabilitadoParaVoto(){
+    private boolean associadoHabilitadoParaVoto() {
         Associado associado = associadoService.find(idAssociado);
-        if(associado.isHabilitacaoParaVoto()){
-            return new HabiitacaoVoto().isIndisponivel(associado.getCpf());
+        if (associado.isHabilitacaoParaVoto()) {
+            return new HabiitacaoVoto().isDisponivel(associado.getCpf())
+                    == HabilitacaoParaVoto.HABILITADO;
         }
         return true;
     }
 
-
-
-    private boolean associadoJaVotouNaPauta(){
-        votoAssembleiaService.existeVotoDoAssociadoNaPauta(idAssociado, idPauta);
-        return true;
+    private boolean associadoDisponivelParaPauta(){
+        return !votoAssembleiaService.existeVotoDoAssociadoNaPauta(idAssociado, idPauta);
     }
 }

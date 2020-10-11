@@ -1,12 +1,11 @@
 package com.cooperativismo.externo;
 
+import com.cooperativismo.enums.HabilitacaoParaVoto;
+
 public class HabiitacaoVoto {
 
-    public boolean isDisponivel(String cpf){
+    public HabilitacaoParaVoto isDisponivel(String cpf){
         //TODO consultaexterna
-        return true;
-    }
-    public boolean isIndisponivel(String cpf){
-        return !isDisponivel(cpf);
+        return HabilitacaoParaVoto.HABILITADO;
     }
 }

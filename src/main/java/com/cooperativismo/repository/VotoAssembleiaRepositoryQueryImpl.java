@@ -2,22 +2,14 @@ package com.cooperativismo.repository;
 
 
 import com.cooperativismo.model.VotoAssembleia;
-import com.mongodb.client.model.Filters;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.mapreduce.GroupBy;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
-
-import static com.mongodb.client.model.Aggregates.match;
-import static com.mongodb.client.model.Aggregates.unwind;
 
 public class VotoAssembleiaRepositoryQueryImpl implements VotoAssembleiaRepositoryQuery{
 
@@ -46,23 +38,18 @@ public class VotoAssembleiaRepositoryQueryImpl implements VotoAssembleiaReposito
     public LocalDateTime horarioUltimaVotacao(String idPauta) {
         //        pegar o date time da última votacao
 //            pegar votacoes, filtrar pela última
-        List<VotoAssembleia> listHorarioUltimaVotacao = mongoTemplate.find(
-            Query.query(
-                Criteria.where("votoassembleia.idpauta").is(new ObjectId(idPauta))
-            ).with(new Sort(Direction.DESC, "votoassembleia.horarioVoto"))
-            ,VotoAssembleia.class
-        );
-        if(listHorarioUltimaVotacao != null){
-//            return listHorarioUltimaVotacao.size() > 0;
-        }
-//        return false;
-
+//        List<VotoAssembleia> listHorarioUltimaVotacao = mongoTemplate.find(
+//            Query.query(
+//                Criteria.where("votoassembleia.idpauta").is(new ObjectId(idPauta))
+//            ).with(new Sort(Sort.Direction.DESC, "votoassembleia.horarioVoto"))
+//            ,VotoAssembleia.class
+//        );
         return null;
     }
 
     @Override
     public List<VotoAssembleia> totalvotos(String idPauta) {
-        Aggregation agg = new Aggregation(
+//        Aggregation agg = new Aggregation(
 //
 //                unwind("voto"),
 //                project("_id")
@@ -88,6 +75,6 @@ public class VotoAssembleiaRepositoryQueryImpl implements VotoAssembleiaReposito
 //            ).,
 //            VotoAssembleia.class
 //        );
-        return listVotoAssembleia;
+        return null;
     }
 }
