@@ -1,18 +1,17 @@
 package com.cooperativismo.service;
 
+import com.cooperativismo.dto.ResultadoVotacaoDTO;
 import com.cooperativismo.dto.VotoDTO;
 import com.cooperativismo.enums.Voto;
+import com.cooperativismo.exceptions.BadRequestException;
 import com.cooperativismo.model.VotoAssembleia;
-import com.cooperativismo.dto.ResultadoVotacaoDTO;
-import com.cooperativismo.valida.VotoAssembleiaValida;
 import com.cooperativismo.repository.VotoAssembleiaRepository;
+import com.cooperativismo.valida.VotoAssembleiaValida;
 import org.mockito.InjectMocks;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
-import static java.util.stream.Collectors.groupingBy;
 
 @Service
 public class VotoAssembleiaService {
@@ -43,14 +42,20 @@ public class VotoAssembleiaService {
     public void adicionaVoto(VotoDTO votoDTO){
         VotoAssembleiaValida votoAssembleiaValida =
                 new VotoAssembleiaValida(this, associadoService, pautaSevice, votoDTO);
-        if(votoAssembleiaValida.valida()){
+        if (votoAssembleiaValida.valida()) {
             VotoAssembleia votoAssembleia = new VotoAssembleia();
             votoAssembleia.setIdPauta(votoDTO.getIdPauta());
             votoAssembleia.setIdAssociado(votoDTO.getIdAssociado());
             votoAssembleia.setHorarioVoto(LocalDateTime.now());
             votoAssembleia.setVoto(votoDTO.getVoto() == Voto.SIM ? "Sim" : "Não");
             save(votoAssembleia);
+        } else {
+            throw new BadRequestException("Voto invalidado.");
         }
+    }
+
+    public LocalDateTime horarioUltimaVotacao(String idPauta){
+        return votoAssembleiaRepository.horarioUltimaVotacao(idPauta);
     }
 
     public ResultadoVotacaoDTO totalVotos(String idPauta){

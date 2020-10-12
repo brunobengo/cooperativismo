@@ -5,6 +5,8 @@ import com.cooperativismo.service.AssociadoService;
 import com.cooperativismo.service.PautaService;
 import com.cooperativismo.service.VotoAssembleiaService;
 
+import java.time.LocalDateTime;
+
 public class PautaValida implements Valida {
 
     final private VotoAssembleiaService votoAssembleiaService;
@@ -24,7 +26,28 @@ public class PautaValida implements Valida {
 
     @Override
     public boolean valida() {
+        return isAberta(idPauta);
+    }
+
+    private boolean isInativa(Pauta pauta) {
+        LocalDateTime horarioUltimaVotacao = votoAssembleiaService.horarioUltimaVotacao(pauta.getId());
+        return LocalDateTime.now().minusMinutes(1).isAfter(horarioUltimaVotacao);
+    }
+
+    private boolean isJaFechou(Pauta pauta) {
+        LocalDateTime momentoDeFechamentoDaSecao =
+                pauta.getHoraAberturaAssembleia().plusMinutes(pauta.getMinutosDeDuracaoDaSessao());
+        return LocalDateTime.now().isAfter(momentoDeFechamentoDaSecao);
+    }
+
+    private boolean isAberta(String idPauta) {
         Pauta pauta = pautaService.findById(idPauta);
+        if (pauta.isSessaoAberta()) {
+            if (isJaFechou(pauta) || isInativa(pauta)) {
+                pauta.setStatusSessao(false);
+                pautaService.save(pauta);
+            }
+        }
         return pauta.isSessaoAberta();
     }
 }

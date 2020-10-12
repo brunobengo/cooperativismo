@@ -3,7 +3,6 @@ package com.cooperativismo.controller;
 import com.cooperativismo.dto.ResultadoVotacaoDTO;
 import com.cooperativismo.dto.VotoDTO;
 import com.cooperativismo.enums.Voto;
-import com.cooperativismo.model.Pauta;
 import com.cooperativismo.service.VotoAssembleiaService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeAll;
@@ -16,7 +15,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
@@ -67,6 +65,4 @@ public class VotoAssembleiaTests {
                 .andExpect(jsonPath("$.votosNao").value(resultadoVotacaoDTO.getVotosNao()))
                 .andExpect(jsonPath("$.total").value(resultadoVotacaoDTO.getTotal()));
     }
-
-
 }

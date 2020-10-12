@@ -22,18 +22,8 @@ public class PautaController {
     }
 
     @PutMapping("/{id}/iniciapauta")
-//    @ResponseStatus(value = HttpStatus.NO_CONTENT)//TODO ver o que é
     public ResponseEntity iniciapauta(@Validated @RequestBody IniciaPautaDTO iniciaPautaDTO){
         pautaService.iniciaPauta(iniciaPautaDTO);
         return ResponseEntity.ok().build();
-            //TODO ver o que é ResponseEntity
     }
-
-//    @PostMapping(path = "/novovoto", consumes = "application/json")
-//    public ResponseEntity novovoto(@Validated @RequestBody VotoDTO votoDTO) {
-//        votoAssembleiaService.adicionaVoto(votoDTO);
-//        return ResponseEntity.ok().build();
-//    }
-
-
 }

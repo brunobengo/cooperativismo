@@ -1,6 +1,5 @@
 package com.cooperativismo.service;
 
-import com.cooperativismo.dto.IniciaPautaDTO;
 import com.cooperativismo.model.Pauta;
 import com.cooperativismo.repository.PautaRepository;
 import org.junit.jupiter.api.BeforeAll;
@@ -41,37 +40,5 @@ public class PautaServiceTests {
         Pauta pautaRetornada = pautaService.save(pautaMock);
         assertEquals(pautaMock, pautaRetornada);
         verify(pautaRepository).save(eq(pautaMock));
-    }
-
-
-//    -- by bruno ...
-
-    @Test
-    public void testSalva(){
-        pautaService.save(pautaMock); //TODO qual assert utilizar?
-    }
-
-    @Test
-    public void testAbreSecaoVotacao() throws InterruptedException {
-        when(pautaRepository.save(eq(pautaMock))).thenReturn(pautaMock);//porque precisa disso.
-        Pauta pauta = pautaService.save(pautaMock); //TODO verificar como testar isso, precisa do id
-        pautaService.iniciaPauta(new IniciaPautaDTO().setIdPauta(id).setDuracao(1));
-        assertTrue(pautaService.isAberta(pauta.getId()));
-   }
-
-   @Test
-    public void testFechamentoSecaoTempoDeterminado() throws InterruptedException {
-        Pauta pauta = pautaService.save(new Pauta("Alterar relatório"));
-        pautaService.iniciaPauta(new IniciaPautaDTO().setIdPauta(id).setDuracao(1));
-        assertTrue(pautaService.isAberta(pauta.getId()));
-        Thread.sleep(60000);
-        assertFalse(pautaService.isAberta(pauta.getId()));
-    }
-
-    private void assertTrue(boolean resultadoObtido){
-        assertEquals(true, resultadoObtido);
-    }
-    private void assertFalse(boolean resultadoObtido){
-        assertEquals(false, resultadoObtido);
     }
 }

@@ -35,26 +35,4 @@ public class PautaService {
         save(pauta);
         return pauta;
     }
-
-    private boolean isInativa(Pauta pauta) {
-        LocalDateTime horarioUltimaVotacao = votoAssembleiaRepository.horarioUltimaVotacao(pauta.getId());
-        return LocalDateTime.now().minusMinutes(1).isAfter(horarioUltimaVotacao);
-    }
-
-    private boolean isJaFechou(Pauta pauta) {
-        LocalDateTime momentoDeFechamentoDaSecao =
-                pauta.getHoraAberturaAssembleia().plusMinutes(pauta.getMinutosDeDuracaoDaSessao());
-        return LocalDateTime.now().isAfter(momentoDeFechamentoDaSecao);
-    }
-
-    public boolean isAberta(String idPauta) {
-        Pauta pauta = findById(idPauta);
-        if (pauta.isSessaoAberta()) {
-            if (isJaFechou(pauta) || isInativa(pauta)) {
-                pauta.setStatusSessao(false);
-                save(pauta);
-            }
-        }
-        return pauta.isSessaoAberta();
-    }
 }

@@ -3,7 +3,6 @@ package com.cooperativismo.repository;
 import com.cooperativismo.model.VotoAssembleia;
 import com.cooperativismo.dto.ResultadoVotacaoDTO;
 import org.bson.types.ObjectId;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.*;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -11,8 +10,6 @@ import org.springframework.data.mongodb.core.query.Query;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
-import static java.util.stream.Collectors.groupingBy;
 
 public class VotoAssembleiaRepositoryQueryImpl implements VotoAssembleiaRepositoryQuery{
 

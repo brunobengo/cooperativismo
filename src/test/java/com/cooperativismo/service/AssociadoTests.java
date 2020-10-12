@@ -38,14 +38,6 @@ public class AssociadoTests {
         verify(associadoRepository).save(eq(associadoMock));
     }
 
-//  by Bruno
-    @Test
-    public void testSalva(){
-        associadoMock = new Associado();
-        associadoMock.setCpf("1220233222");
-        associadoService.save(associadoMock); //TODO qual assert utilizar?
-    }
-
     private void assertTrue(boolean resultadoObtido){
         assertEquals(true, resultadoObtido);
     }

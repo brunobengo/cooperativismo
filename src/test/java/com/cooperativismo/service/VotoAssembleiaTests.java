@@ -1,10 +1,5 @@
 package com.cooperativismo.service;
 
-import com.cooperativismo.dto.IniciaPautaDTO;
-import com.cooperativismo.dto.VotoDTO;
-import com.cooperativismo.enums.Voto;
-import com.cooperativismo.model.Associado;
-import com.cooperativismo.model.Pauta;
 import com.cooperativismo.model.VotoAssembleia;
 import com.cooperativismo.repository.VotoAssembleiaRepository;
 import org.junit.jupiter.api.Test;
@@ -38,25 +33,5 @@ public class VotoAssembleiaTests {
         VotoAssembleia votoAssembleiaRetornado = votoAssembleiaService.save(votoAssembleiaMock);
         assertEquals(votoAssembleiaMock, votoAssembleiaRetornado);
         verify(votoAssembleiaRepository).save(eq(votoAssembleiaMock));
-    }
-
-//    by Bruno
-    @Test
-    public void testVotacao() throws Exception {
-        Pauta pauta = pautaService
-                .iniciaPauta(new IniciaPautaDTO().setIdPauta(id).setDuracao(1));
-        Associado associado = new Associado("1220233222");
-        VotoDTO votoDTO = new VotoDTO()
-                .setIdAssociado("2020203")
-                .setIdPauta("id")
-                .setVoto(Voto.SIM);
-        votoAssembleiaService.adicionaVoto(votoDTO);
-    }
-
-    private void assertTrue(boolean resultadoObtido){
-        assertEquals(true, resultadoObtido);
-    }
-    private void assertFalse(boolean resultadoObtido){
-        assertEquals(false, resultadoObtido);
     }
 }

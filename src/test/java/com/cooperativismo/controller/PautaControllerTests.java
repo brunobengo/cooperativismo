@@ -1,7 +1,5 @@
 package com.cooperativismo.controller;
 
-import com.cooperativismo.dto.IniciaPautaDTO;
-import com.cooperativismo.dto.ResultadoVotacaoDTO;
 import com.cooperativismo.model.Pauta;
 import com.cooperativismo.service.PautaService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -40,7 +38,7 @@ public class PautaControllerTests {
 
     @Test
     public void criaPautaTest() throws Exception {
-        Pauta pauta = new Pauta("Pauta testee");
+        Pauta pauta = new Pauta("Pauta teste");
         when(pautaService.save(any(Pauta.class))).thenReturn(pauta);
         mockMvc.perform(post("/pauta/novapauta")
                 .content(mapper.writeValueAsString(pauta))
