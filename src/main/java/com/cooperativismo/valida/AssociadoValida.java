@@ -6,6 +6,9 @@ import com.cooperativismo.model.Associado;
 import com.cooperativismo.service.AssociadoService;
 import com.cooperativismo.service.PautaService;
 import com.cooperativismo.service.VotoAssembleiaService;
+import org.json.JSONException;
+
+import java.io.IOException;
 
 public class AssociadoValida implements Valida {
 
@@ -25,11 +28,11 @@ public class AssociadoValida implements Valida {
     }
 
     @Override
-    public boolean valida() {
+    public boolean valida() throws IOException, JSONException {
         return associadoHabilitadoParaVoto() && associadoDisponivelParaPauta();
     }
 
-    private boolean associadoHabilitadoParaVoto() {
+    private boolean associadoHabilitadoParaVoto() throws IOException, JSONException {
         Associado associado = associadoService.find(idAssociado);
         if (associado.isHabilitacaoParaVoto()) {
             return new HabiitacaoVoto().isDisponivel(associado.getCpf())

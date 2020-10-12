@@ -27,11 +27,11 @@ public class PautaService {
         return pautaRepository.findById(id).get();
     }
 
-    public Pauta iniciaPauta(IniciaPautaDTO iniciaPautaDTO) {
+    public Pauta iniciaassembleia(IniciaPautaDTO iniciaPautaDTO) {
         Pauta pauta = findById(iniciaPautaDTO.getIdPauta());
-        pauta.setMinutosDeDuracaoDaSessao(iniciaPautaDTO.getDuracao());
-        pauta.setHoraAberturaAssembleia(LocalDateTime.now());
-        pauta.setStatusSessao(true);
+        pauta.setMinutosDeDuracaoDaSessao(iniciaPautaDTO.getDuracao())
+                .setHoraAberturaAssembleia(LocalDateTime.now())
+                .setStatusSessao(true);
         save(pauta);
         return pauta;
     }

@@ -7,9 +7,11 @@ import com.cooperativismo.exceptions.BadRequestException;
 import com.cooperativismo.model.VotoAssembleia;
 import com.cooperativismo.repository.VotoAssembleiaRepository;
 import com.cooperativismo.valida.VotoAssembleiaValida;
+import org.json.JSONException;
 import org.mockito.InjectMocks;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -39,15 +41,15 @@ public class VotoAssembleiaService {
         return votoAssembleiaRepository.existeVotoDoAssociadoNaPauta(idAssociado, idPauta);
     }
 
-    public void adicionaVoto(VotoDTO votoDTO){
+    public void adicionaVoto(VotoDTO votoDTO) throws IOException, JSONException {
         VotoAssembleiaValida votoAssembleiaValida =
                 new VotoAssembleiaValida(this, associadoService, pautaSevice, votoDTO);
         if (votoAssembleiaValida.valida()) {
-            VotoAssembleia votoAssembleia = new VotoAssembleia();
-            votoAssembleia.setIdPauta(votoDTO.getIdPauta());
-            votoAssembleia.setIdAssociado(votoDTO.getIdAssociado());
-            votoAssembleia.setHorarioVoto(LocalDateTime.now());
-            votoAssembleia.setVoto(votoDTO.getVoto() == Voto.SIM ? "Sim" : "Não");
+            VotoAssembleia votoAssembleia = new VotoAssembleia()
+                    .setIdPauta(votoDTO.getIdPauta())
+                    .setIdAssociado(votoDTO.getIdAssociado())
+                    .setHorarioVoto(LocalDateTime.now())
+                    .setVoto(votoDTO.getVoto() == Voto.SIM ? "Sim" : "Não");
             save(votoAssembleia);
         } else {
             throw new BadRequestException("Voto invalidado.");

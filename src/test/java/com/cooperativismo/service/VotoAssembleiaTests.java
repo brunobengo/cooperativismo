@@ -20,8 +20,6 @@ public class VotoAssembleiaTests {
     private VotoAssembleiaRepository votoAssembleiaRepository;
     @InjectMocks
     private VotoAssembleiaService votoAssembleiaService;
-    @InjectMocks
-    private PautaService pautaService;
 
     private static final String id = "id";
 

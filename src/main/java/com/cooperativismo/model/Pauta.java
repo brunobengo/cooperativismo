@@ -1,17 +1,12 @@
 package com.cooperativismo.model;
 
-import lombok.*;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.Id;
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
-@EqualsAndHashCode
-@AllArgsConstructor
-@Getter
-@Setter
-@Builder
-public class Pauta implements Serializable {
+@Document
+public class Pauta {
 
     @Id
     private String id;
@@ -31,10 +26,6 @@ public class Pauta implements Serializable {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getDescricao() {
         return descricao;
     }
@@ -43,32 +34,31 @@ public class Pauta implements Serializable {
         return statusSessao;
     }
 
-    public void setStatusSessao(boolean statusSessao) {
+    public Pauta setStatusSessao(boolean statusSessao) {
         this.statusSessao = statusSessao;
+        return this;
     }
 
     public LocalDateTime getHoraAberturaAssembleia() {
         return horaAberturaAssembleia;
     }
 
-    public void setHoraAberturaAssembleia(LocalDateTime horaAberturaAssembleia) {
+    public Pauta setHoraAberturaAssembleia(LocalDateTime horaAberturaAssembleia) {
         this.horaAberturaAssembleia = horaAberturaAssembleia;
+        return this;
     }
 
     public int getMinutosDeDuracaoDaSessao() {
         return minutosDeDuracaoDaSessao;
     }
 
-    public void setMinutosDeDuracaoDaSessao(int minutosDeDuracaoDaSessao) {
+    public Pauta setMinutosDeDuracaoDaSessao(int minutosDeDuracaoDaSessao) {
         this.minutosDeDuracaoDaSessao = minutosDeDuracaoDaSessao;
+        return this;
     }
-
 
     public Pauta setDescricao(String descricao) {
         this.descricao = descricao;
         return this;
     }
-
-
 }
-

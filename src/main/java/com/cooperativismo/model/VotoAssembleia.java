@@ -2,7 +2,7 @@ package com.cooperativismo.model;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.*;
+import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
@@ -22,16 +22,13 @@ public class VotoAssembleia {
 
     private LocalDateTime horarioVoto;
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getIdAssociado() {
         return idAssociado;
     }
 
-    public void setHorarioVoto(LocalDateTime horarioVoto) {
+    public VotoAssembleia setHorarioVoto(LocalDateTime horarioVoto) {
         this.horarioVoto = horarioVoto;
+        return this;
     }
 
     public String getId() {
@@ -42,24 +39,27 @@ public class VotoAssembleia {
         return idPauta;
     }
 
-    public void setIdPauta(String idPauta) {
+    public VotoAssembleia setIdPauta(String idPauta) {
         this.idPauta = idPauta;
+        return this;
     }
 
     public String getCpfAssociado() {
         return getIdAssociado();
     }
 
-    public void setIdAssociado(String idAssociado) {
+    public VotoAssembleia setIdAssociado(String idAssociado) {
         this.idAssociado = idAssociado;
+        return this;
     }
 
     public String getVoto() {
         return voto;
     }
 
-    public void setVoto(String voto) {
+    public VotoAssembleia setVoto(String voto) {
         this.voto = voto;
+        return this;
     }
 
     public LocalDateTime getHorarioVoto() {

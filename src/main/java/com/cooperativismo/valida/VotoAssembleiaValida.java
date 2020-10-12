@@ -4,6 +4,9 @@ import com.cooperativismo.dto.VotoDTO;
 import com.cooperativismo.service.AssociadoService;
 import com.cooperativismo.service.PautaService;
 import com.cooperativismo.service.VotoAssembleiaService;
+import org.json.JSONException;
+
+import java.io.IOException;
 
 public class VotoAssembleiaValida implements Valida{
 
@@ -23,7 +26,7 @@ public class VotoAssembleiaValida implements Valida{
     }
 
     @Override
-    public boolean valida(){
+    public boolean valida() throws IOException, JSONException {
         return new AssociadoValida(votoAssembleiaService, associadoService, pautaService, idPauta, idAssociado)
                 .valida()
                 && new PautaValida(votoAssembleiaService, associadoService, pautaService, idPauta, idAssociado)
