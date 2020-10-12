@@ -10,7 +10,6 @@
 - O voto é limitado a SIM ou NÃO;
 
 - O projeto faz integração com um serviço que verifica se o CPF do Associado está apto a votar;
-
 - Foi utilizado Junit e Mockito para fazer testes;
 
 - Para rodar, é necessário clonar e pode ser executado através de alguma IDE para Java.
