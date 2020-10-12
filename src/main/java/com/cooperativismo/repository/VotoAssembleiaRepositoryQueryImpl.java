@@ -1,10 +1,13 @@
 package com.cooperativismo.repository;
 
-import com.cooperativismo.model.VotoAssembleia;
 import com.cooperativismo.dto.ResultadoVotacaoDTO;
+import com.cooperativismo.model.VotoAssembleia;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.*;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.data.mongodb.core.aggregation.GroupOperation;
+import org.springframework.data.mongodb.core.aggregation.MatchOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 
