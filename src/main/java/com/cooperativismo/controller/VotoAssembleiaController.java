@@ -20,7 +20,7 @@ public class VotoAssembleiaController {
         this.votoAssembleiaService = votoAssembleiaService;
     }
 
-    @PostMapping(path = "/novovoto", consumes = "application/json")
+    @PostMapping(path = "/v1/novovoto", consumes = "application/json")
     public ResponseEntity novovoto(@Validated @RequestBody VotoDTO votoDTO) {
         try {
             votoAssembleiaService.adicionaVoto(votoDTO);
@@ -32,7 +32,7 @@ public class VotoAssembleiaController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping(path = "/{id}/resultado", produces = "application/json")
+    @GetMapping(path = "/v1/{id}/resultado", produces = "application/json")
     public ResponseEntity<ResultadoVotacaoDTO> resultado(@PathVariable String id) {
         return ResponseEntity.ok(votoAssembleiaService.totalVotos(id));
     }

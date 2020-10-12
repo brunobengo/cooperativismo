@@ -16,12 +16,12 @@ public class PautaController {
         this.pautaService = pautaService;
     }
 
-    @PostMapping(path = "/novapauta", consumes = "application/json")
+    @PostMapping(path = "/v1/novapauta", consumes = "application/json")
     public Pauta novapauta(@RequestBody Pauta novaPauta) {
         return pautaService.save(novaPauta);
     }
 
-    @PutMapping("/{id}/iniciaassembleia")
+    @PutMapping("/v1/{id}/iniciaassembleia")
     public ResponseEntity iniciaassembleia(@Validated @RequestBody IniciaPautaDTO iniciaPautaDTO) {
         pautaService.iniciaassembleia(iniciaPautaDTO);
         return ResponseEntity.ok().build();
