@@ -34,11 +34,8 @@ public class AssociadoValida implements Valida {
 
     private boolean associadoHabilitadoParaVoto() throws IOException, JSONException {
         Associado associado = associadoService.find(idAssociado);
-        if (associado.isHabilitacaoParaVoto()) {
-            return new HabiitacaoVoto().isDisponivel(associado.getCpf())
-                    == HabilitacaoParaVoto.HABILITADO;
-        }
-        return true;
+        return new HabiitacaoVoto().isDisponivel(associado.getCpf())
+                == HabilitacaoParaVoto.HABILITADO;
     }
 
     private boolean associadoDisponivelParaPauta(){

@@ -9,6 +9,7 @@ import com.cooperativismo.repository.VotoAssembleiaRepository;
 import com.cooperativismo.valida.VotoAssembleiaValida;
 import org.json.JSONException;
 import org.mockito.InjectMocks;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -20,9 +21,9 @@ public class VotoAssembleiaService {
 
     final VotoAssembleiaRepository votoAssembleiaRepository;
 
-    @InjectMocks
+    @Autowired
     private AssociadoService associadoService;
-    @InjectMocks
+    @Autowired
     private PautaService pautaSevice;
 
     public VotoAssembleiaService(VotoAssembleiaRepository votoAssembleiaRepository) {

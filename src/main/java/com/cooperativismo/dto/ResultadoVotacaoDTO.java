@@ -4,7 +4,6 @@ public class ResultadoVotacaoDTO {
 
     private int VotosSim;
     private int VotosNao;
-    private int Total;
 
     public ResultadoVotacaoDTO(){
 
