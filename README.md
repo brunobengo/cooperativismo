@@ -1,7 +1,7 @@
 **Cooperativismo**
 
 - O projeto possui um mapa mental com suas bases, disponível em /src/utils;
-- Projeto foi desenvolvido utilizando o MongoDB para persistência dos dados;
+- Projeto foi desenvolvido utilizando o MongoDB para persistência dos dados. É necessário configurar uma conexão no /src/java/resources/application.properties;
 
 - É possível criar uma pauta e iniciar sua assembleia;
 - É possível votar em uma assembleia e obter os votos dela a partir do seu id;
