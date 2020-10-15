@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+
 @RestController
 @RequestMapping("/pauta")
 public class PautaController {
@@ -21,7 +23,7 @@ public class PautaController {
         return pautaService.save(novaPauta);
     }
 
-    @PutMapping("/v1/{id}/iniciaassembleia")
+    @PutMapping("/v1/iniciaassembleia")
     public ResponseEntity iniciaassembleia(@Validated @RequestBody IniciaPautaDTO iniciaPautaDTO) {
         pautaService.iniciaassembleia(iniciaPautaDTO);
         return ResponseEntity.ok().build();

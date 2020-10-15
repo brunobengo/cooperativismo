@@ -38,17 +38,11 @@ public class VotoAssembleiaRepositoryQueryImpl implements VotoAssembleiaReposito
 
     @Override
     public LocalDateTime horarioUltimaVotacao(String idPauta) {
-        MatchOperation matchStage = Aggregation.match(Criteria.where("idPauta").is(idPauta));
-        SortOperation sort = Aggregation.sort(Sort.Direction.DESC, "horarioVoto");
-
-        Aggregation agg = Aggregation.newAggregation(VotoAssembleia.class, matchStage, sort);
-
-        AggregationResults<VotoAssembleia> aggregationVotoAssembleia
-                = mongoTemplate.aggregate(agg, "votoassembleia", VotoAssembleia.class);
-        List<VotoAssembleia> listVotoAssembleia = aggregationVotoAssembleia.getMappedResults();
-
+        List<VotoAssembleia> listVotoAssembleia = mongoTemplate.find(
+                new Query(Criteria.where("idPauta").is(idPauta)), VotoAssembleia.class
+        );
         if (listVotoAssembleia != null && listVotoAssembleia.size() > 0) {
-            return listVotoAssembleia.get(0).getHorarioVoto();
+            return listVotoAssembleia.get(listVotoAssembleia.size()-1).getHorarioVoto();
         }
         return LocalDateTime.now();
     }
@@ -56,6 +50,7 @@ public class VotoAssembleiaRepositoryQueryImpl implements VotoAssembleiaReposito
     @Override
     public ResultadoVotacaoDTO totalvotos(String idPauta) throws JSONException {
         ResultadoVotacaoDTO resultadoVotacaoDTO = new ResultadoVotacaoDTO() ;
+        resultadoVotacaoDTO.setIdPauta(idPauta);
         resultadoVotacaoDTO.setVotosSim(getVotos(idPauta, Voto.SIM));
         resultadoVotacaoDTO.setVotosNao(getVotos(idPauta, Voto.NÃO));
         return resultadoVotacaoDTO;

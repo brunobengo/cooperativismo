@@ -2,11 +2,11 @@ package com.cooperativismo.dto;
 
 public class ResultadoVotacaoDTO {
 
+    private String idPauta;
     private int VotosSim;
     private int VotosNao;
 
     public ResultadoVotacaoDTO(){
-
     }
 
     public int getVotosSim() {
@@ -29,6 +29,15 @@ public class ResultadoVotacaoDTO {
 
     public int getTotal() {
         return getVotosSim() + getVotosNao();
+    }
+
+    public String getIdPauta() {
+        return idPauta;
+    }
+
+    public ResultadoVotacaoDTO setIdPauta(String idPauta) {
+        this.idPauta = idPauta;
+        return this;
     }
 }
 

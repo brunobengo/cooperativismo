@@ -6,7 +6,7 @@ public class VotoDTO {
 
     private String idPauta;
     private String idAssociado;
-    private Voto voto;
+    private boolean confirma;
 
     public VotoDTO(){
 
@@ -30,12 +30,13 @@ public class VotoDTO {
         return this;
     }
 
-    public Voto getVoto() {
-        return voto;
-    }
-
     public VotoDTO setVoto(Voto voto) {
-        this.voto = voto;
+        this.confirma = voto == Voto.SIM;
         return this;
     }
+
+    public boolean isConfirma() {
+        return confirma;
+    }
+
 }

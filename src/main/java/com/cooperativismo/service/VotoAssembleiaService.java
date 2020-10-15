@@ -2,13 +2,14 @@ package com.cooperativismo.service;
 
 import com.cooperativismo.dto.ResultadoVotacaoDTO;
 import com.cooperativismo.dto.VotoDTO;
-import com.cooperativismo.enums.Voto;
+import com.cooperativismo.enums.HabilitacaoParaVoto;
 import com.cooperativismo.exceptions.BadRequestException;
+import com.cooperativismo.externo.HabiitacaoVoto;
+import com.cooperativismo.model.Associado;
+import com.cooperativismo.model.Pauta;
 import com.cooperativismo.model.VotoAssembleia;
 import com.cooperativismo.repository.VotoAssembleiaRepository;
-import com.cooperativismo.valida.VotoAssembleiaValida;
 import org.json.JSONException;
-import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +25,7 @@ public class VotoAssembleiaService {
     @Autowired
     private AssociadoService associadoService;
     @Autowired
-    private PautaService pautaSevice;
+    private PautaService pautaService;
 
     public VotoAssembleiaService(VotoAssembleiaRepository votoAssembleiaRepository) {
         this.votoAssembleiaRepository = votoAssembleiaRepository;
@@ -43,17 +44,22 @@ public class VotoAssembleiaService {
     }
 
     public void adicionaVoto(VotoDTO votoDTO) throws IOException, JSONException {
-        VotoAssembleiaValida votoAssembleiaValida =
-                new VotoAssembleiaValida(this, associadoService, pautaSevice, votoDTO);
-        if (votoAssembleiaValida.valida()) {
+
+        if(associadoDesabilitadoParaVoto(votoDTO.getIdAssociado())){
+            throw new BadRequestException("Associado está desabilitado para voto.");
+        }else if(associadoJaVotouNaPauta(votoDTO.getIdAssociado(), votoDTO.getIdPauta())){
+            throw new BadRequestException("Associado já votou na pauta.");
+        }else if(pautaJaFechou(votoDTO.getIdPauta())) {
+            throw new BadRequestException("Pauta está fechada.");
+        }else if(pautaIsInativa(votoDTO.getIdPauta())){
+            throw new BadRequestException("Pauta foi fechada por inatividade.");
+        }else{
             VotoAssembleia votoAssembleia = new VotoAssembleia()
                     .setIdPauta(votoDTO.getIdPauta())
                     .setIdAssociado(votoDTO.getIdAssociado())
                     .setHorarioVoto(LocalDateTime.now())
-                    .setVoto(votoDTO.getVoto() == Voto.SIM ? "Sim" : "Não");
+                    .setVoto(votoDTO.isConfirma() ? "Sim" : "Não");
             save(votoAssembleia);
-        } else {
-            throw new BadRequestException("Voto invalidado.");
         }
     }
 
@@ -63,5 +69,38 @@ public class VotoAssembleiaService {
 
     public ResultadoVotacaoDTO totalVotos(String idPauta){
         return votoAssembleiaRepository.totalvotos(idPauta);
+    }
+
+    private boolean pautaIsInativa(String idPauta) {
+        Pauta pauta = pautaService.findById(idPauta);
+        LocalDateTime horarioUltimaVotacao = horarioUltimaVotacao(pauta.getId());
+        boolean isInativa = LocalDateTime.now().minusMinutes(1).isAfter(horarioUltimaVotacao);
+        if(isInativa){
+            pauta.setStatusSessao(false);
+            pautaService.save(pauta);
+        }
+        return isInativa;
+    }
+
+    private boolean pautaJaFechou(String idPauta) {
+        Pauta pauta = pautaService.findById(idPauta);
+        LocalDateTime momentoDeFechamentoDaSecao =
+                pauta.getHoraAberturaAssembleia().plusMinutes(pauta.getMinutosDeDuracaoDaSessao());
+        boolean jaFechou = LocalDateTime.now().isAfter(momentoDeFechamentoDaSecao);
+        if(jaFechou){
+            pauta.setStatusSessao(false);
+            pautaService.save(pauta);
+        }
+        return jaFechou;
+    }
+
+    private boolean associadoDesabilitadoParaVoto(String idAsssociado) throws IOException, JSONException {
+        Associado associado = associadoService.find(idAsssociado);
+        return !(new HabiitacaoVoto().isDisponivel(associado.getCpf())
+                == HabilitacaoParaVoto.HABILITADO);
+    }
+
+    private boolean associadoJaVotouNaPauta(String idAssociado, String idPauta){
+        return existeVotoDoAssociadoNaPauta(idAssociado, idPauta);
     }
 }
