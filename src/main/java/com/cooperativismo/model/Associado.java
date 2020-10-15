@@ -3,12 +3,14 @@ package com.cooperativismo.model;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
 
 @Document
 public class Associado {
 
     @Id
     private String id;
+    @NotBlank
     private String cpf;
     private boolean habilitacaoParaVoto;
 

@@ -3,6 +3,7 @@ package com.cooperativismo.model;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 @Document
@@ -10,6 +11,7 @@ public class Pauta {
 
     @Id
     private String id;
+    @NotBlank
     private String descricao;
     private boolean statusSessao;
     private LocalDateTime horaAberturaAssembleia;

@@ -18,6 +18,7 @@ public class VotoAssembleia {
     @NotBlank
     private String idAssociado;
 
+    @NotBlank
     private String voto;
 
     private LocalDateTime horarioVoto;
