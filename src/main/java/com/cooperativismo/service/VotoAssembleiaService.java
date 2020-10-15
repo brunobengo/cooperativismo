@@ -3,7 +3,7 @@ package com.cooperativismo.service;
 import com.cooperativismo.dto.ResultadoVotacaoDTO;
 import com.cooperativismo.dto.VotoDTO;
 import com.cooperativismo.enums.HabilitacaoParaVoto;
-import com.cooperativismo.exceptions.BadRequestException;
+import com.cooperativismo.exceptions.InternalServerErrorException;
 import com.cooperativismo.externo.HabiitacaoVoto;
 import com.cooperativismo.model.Associado;
 import com.cooperativismo.model.Pauta;
@@ -46,13 +46,13 @@ public class VotoAssembleiaService {
     public void adicionaVoto(VotoDTO votoDTO) throws IOException, JSONException {
 
         if(associadoDesabilitadoParaVoto(votoDTO.getIdAssociado())){
-            throw new BadRequestException("Associado está desabilitado para voto.");
+            throw new InternalServerErrorException("Associado está desabilitado para voto.");
         }else if(associadoJaVotouNaPauta(votoDTO.getIdAssociado(), votoDTO.getIdPauta())){
-            throw new BadRequestException("Associado já votou na pauta.");
+            throw new InternalServerErrorException("Associado já votou na pauta.");
         }else if(pautaJaFechou(votoDTO.getIdPauta())) {
-            throw new BadRequestException("Pauta está fechada.");
+            throw new InternalServerErrorException("Pauta está fechada.");
         }else if(pautaIsInativa(votoDTO.getIdPauta())){
-            throw new BadRequestException("Pauta foi fechada por inatividade.");
+            throw new InternalServerErrorException("Pauta foi fechada por inatividade.");
         }else{
             VotoAssembleia votoAssembleia = new VotoAssembleia()
                     .setIdPauta(votoDTO.getIdPauta())

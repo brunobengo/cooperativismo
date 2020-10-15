@@ -2,7 +2,7 @@ package com.cooperativismo.controller;
 
 import com.cooperativismo.dto.ResultadoVotacaoDTO;
 import com.cooperativismo.dto.VotoDTO;
-import com.cooperativismo.exceptions.BadRequestException;
+import com.cooperativismo.exceptions.InternalServerErrorException;
 import com.cooperativismo.service.VotoAssembleiaService;
 import org.json.JSONException;
 import org.springframework.http.ResponseEntity;
@@ -21,16 +21,10 @@ public class VotoAssembleiaController {
         this.votoAssembleiaService = votoAssembleiaService;
     }
 
-    @ExceptionHandler(BadRequestException.class)
+    @ExceptionHandler(InternalServerErrorException.class)
     @PostMapping(path = "/v1/novovoto", consumes = "application/json")
-    public ResponseEntity novovoto(@Validated @RequestBody VotoDTO votoDTO) {
-        try {
-            votoAssembleiaService.adicionaVoto(votoDTO);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+    public ResponseEntity novovoto(@Validated @RequestBody VotoDTO votoDTO) throws IOException, JSONException {
+        votoAssembleiaService.adicionaVoto(votoDTO);
         return ResponseEntity.ok().build();
     }
 

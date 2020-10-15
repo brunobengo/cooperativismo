@@ -48,7 +48,7 @@ public class VotoAssembleiaTests {
                 .setIdPauta(id)
                 .setVoto(Voto.SIM);
         doNothing().when(votoAssembleiaService).adicionaVoto(eq(votoDTO));
-        mockMvc.perform(post("/voto/v1/novovoto")
+        mockMvc.perform(post("/assembleia/v1/novovoto")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(votoDTO)))
                 .andExpect(status().is2xxSuccessful());
@@ -59,7 +59,7 @@ public class VotoAssembleiaTests {
         ResultadoVotacaoDTO resultadoVotacaoDTO = new ResultadoVotacaoDTO().setVotosNao(1).setVotosSim(2);
         when(votoAssembleiaService.totalVotos(id)).thenReturn(resultadoVotacaoDTO);
 
-        mockMvc.perform(get((String.format("%s/%s/%s", "/voto/v1", id, "resultado"))))
+        mockMvc.perform(get((String.format("%s/%s", "/assembleia/v1/resultado", id))))
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("$.votosSim").value(resultadoVotacaoDTO.getVotosSim()))
                 .andExpect(jsonPath("$.votosNao").value(resultadoVotacaoDTO.getVotosNao()))
