@@ -43,24 +43,13 @@ public class VotoAssembleiaService {
         return votoAssembleiaRepository.existeVotoDoAssociadoNaPauta(idAssociado, idPauta);
     }
 
-    public void adicionaVoto(VotoDTO votoDTO) throws IOException, JSONException {
-
-        if(associadoDesabilitadoParaVoto(votoDTO.getIdAssociado())){
-            throw new InternalServerErrorException("Associado está desabilitado para voto.");
-        }else if(associadoJaVotouNaPauta(votoDTO.getIdAssociado(), votoDTO.getIdPauta())){
-            throw new InternalServerErrorException("Associado já votou na pauta.");
-        }else if(pautaJaFechou(votoDTO.getIdPauta())) {
-            throw new InternalServerErrorException("Pauta está fechada.");
-        }else if(pautaIsInativa(votoDTO.getIdPauta())){
-            throw new InternalServerErrorException("Pauta foi fechada por inatividade.");
-        }else{
-            VotoAssembleia votoAssembleia = new VotoAssembleia()
-                    .setIdPauta(votoDTO.getIdPauta())
-                    .setIdAssociado(votoDTO.getIdAssociado())
-                    .setHorarioVoto(LocalDateTime.now())
-                    .setVoto(votoDTO.isConfirma() ? "Sim" : "Não");
-            save(votoAssembleia);
-        }
+    public void adicionaVoto(VotoDTO votoDTO) {
+        VotoAssembleia votoAssembleia = new VotoAssembleia()
+                .setIdPauta(votoDTO.getIdPauta())
+                .setIdAssociado(votoDTO.getIdAssociado())
+                .setHorarioVoto(LocalDateTime.now())
+                .setVoto(votoDTO.isConfirma() ? "Sim" : "Não");
+        save(votoAssembleia);
     }
 
     public LocalDateTime horarioUltimaVotacao(String idPauta){
@@ -71,7 +60,7 @@ public class VotoAssembleiaService {
         return votoAssembleiaRepository.totalvotos(idPauta);
     }
 
-    private boolean pautaIsInativa(String idPauta) {
+    public boolean pautaIsInativa(String idPauta) {
         Pauta pauta = pautaService.findById(idPauta);
         LocalDateTime horarioUltimaVotacao = horarioUltimaVotacao(pauta.getId());
         boolean isInativa = LocalDateTime.now().minusMinutes(1).isAfter(horarioUltimaVotacao);
@@ -82,7 +71,7 @@ public class VotoAssembleiaService {
         return isInativa;
     }
 
-    private boolean pautaJaFechou(String idPauta) {
+    public boolean pautaJaFechou(String idPauta) {
         Pauta pauta = pautaService.findById(idPauta);
         LocalDateTime momentoDeFechamentoDaSecao =
                 pauta.getHoraAberturaAssembleia().plusMinutes(pauta.getMinutosDeDuracaoDaSessao());
@@ -94,13 +83,13 @@ public class VotoAssembleiaService {
         return jaFechou;
     }
 
-    private boolean associadoDesabilitadoParaVoto(String idAsssociado) throws IOException, JSONException {
+    public boolean associadoDesabilitadoParaVoto(String idAsssociado) throws IOException, JSONException {
         Associado associado = associadoService.find(idAsssociado);
         return !(new HabiitacaoVoto().isDisponivel(associado.getCpf())
                 == HabilitacaoParaVoto.HABILITADO);
     }
 
-    private boolean associadoJaVotouNaPauta(String idAssociado, String idPauta){
+    public boolean associadoJaVotouNaPauta(String idAssociado, String idPauta){
         return existeVotoDoAssociadoNaPauta(idAssociado, idPauta);
     }
 }
