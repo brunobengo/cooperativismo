@@ -1,6 +1,6 @@
 package com.cooperativismo.api.controller;
 
-import com.cooperativismo.api.model.PautaModel;
+//import com.cooperativismo.api.model.PautaModel;
 import com.cooperativismo.domain.model.Pauta;
 import com.cooperativismo.domain.repository.PautaRepository;
 import com.cooperativismo.domain.service.PautaService;
@@ -30,39 +30,37 @@ public class PautaController {
         this.pautaService = pautaService;
     }
 
-    @GetMapping
-    public List<PautaModel> listar() {
-        return toCollectionModel(pautaRepository.findAll());
+    @GetMapping("/")
+    public List<Pauta> listar() {
+        return pautaRepository.findAll();
     }
 
     @PostMapping(path = "/v1/novapauta")
     @ResponseStatus(HttpStatus.CREATED)
-    public PautaModel novapauta(@Valid @RequestBody PautaModel pautaModel) {
-        Pauta pauta = toEntity(pautaModel);
-        return toModel(pautaRepository.save(pauta));
+    public Pauta novapauta(@Valid @RequestBody Pauta pauta) {
+        return pautaRepository.save(pauta);
     }
-
 
     @PutMapping("/v1/iniciaassembleia")
-    public ResponseEntity<PautaModel> iniciaassembleia(@RequestBody PautaModel pautamodel) {
-        if (!pautaRepository.existsById(pautamodel.getId())) {
+    public ResponseEntity<Pauta> iniciaassembleia(@RequestBody Pauta pauta) {
+        if (!pautaRepository.existsById(pauta.getId())) {
             return ResponseEntity.notFound().build();
         }
-        pautaRepository.save(toEntity(pautamodel));
-        return ResponseEntity.ok(pautamodel);
+        pautaService.iniciaAssembleia(pauta);
+        return ResponseEntity.ok(pauta);
     }
 
-    private PautaModel toModel(Pauta pauta) {
-        return modelMapper.map(pauta, PautaModel.class);
-    }
-
-    private List<PautaModel> toCollectionModel(List<Pauta> pautas) {
-        return pautas.stream()
-                .map(pauta -> toModel(pauta))
-                .collect(Collectors.toList());
-    }
-
-    private Pauta toEntity(PautaModel pautaModel) {
-        return modelMapper.map(pautaModel, Pauta.class);
-    }
+//    private PautaModel toModel(Pauta pauta) {
+//        return modelMapper.map(pauta, PautaModel.class);
+//    }
+//
+//    private List<PautaModel> toCollectionModel(List<Pauta> pautas) {
+//        return pautas.stream()
+//                .map(pauta -> toModel(pauta))
+//                .collect(Collectors.toList());
+//    }
+//
+//    private Pauta toEntity(PautaModel pautaModel) {
+//        return modelMapper.map(pautaModel, Pauta.class);
+//    }
 }

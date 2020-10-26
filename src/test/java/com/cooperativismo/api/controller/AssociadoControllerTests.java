@@ -1,6 +1,7 @@
 package com.cooperativismo.api.controller;
 
 import com.cooperativismo.domain.model.Associado;
+import com.cooperativismo.domain.repository.AssociadoRepository;
 import com.cooperativismo.domain.service.AssociadoService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeAll;
@@ -27,7 +28,7 @@ public class AssociadoControllerTests {
 
     private static ObjectMapper mapper;
     @MockBean
-    private AssociadoService associadoService;
+    private AssociadoRepository associadoRepository;
 
     private static final String id = "id";
 
@@ -39,7 +40,7 @@ public class AssociadoControllerTests {
     @Test
     public void novoAssociadoService() throws Exception {
         Associado associado = new Associado("12022203323");
-        when(associadoService.save(any(Associado.class))).thenReturn(associado);
+        when(associadoRepository.save(any(Associado.class))).thenReturn(associado);
         mockMvc.perform(post("/associado/v1/novoassociado")
                 .content(mapper.writeValueAsString(associado))
                 .contentType(MediaType.APPLICATION_JSON))

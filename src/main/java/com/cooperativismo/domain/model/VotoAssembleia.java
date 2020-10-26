@@ -1,8 +1,10 @@
 package com.cooperativismo.domain.model;
 
+import com.cooperativismo.domain.enums.Voto;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.OffsetDateTime;
 
@@ -12,59 +14,56 @@ public class VotoAssembleia {
     @Id
     private String id;
 
-    @NotBlank
-    private String idPauta;
+    @ManyToOne
+    private Pauta pauta;
 
-    @NotBlank
-    private String idAssociado;
+    @ManyToOne
+    private Associado associado;
 
-    @NotBlank
-    private String voto;
+//    @NotBlank
+    @Enumerated(EnumType.STRING)
+    private Voto voto;
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private OffsetDateTime horarioVoto;
-
-    public String getIdAssociado() {
-        return idAssociado;
-    }
-
-    public VotoAssembleia setHorarioVoto(OffsetDateTime horarioVoto) {
-        this.horarioVoto = horarioVoto;
-        return this;
-    }
 
     public String getId() {
         return id;
     }
 
-    public String getIdPauta() {
-        return idPauta;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public VotoAssembleia setIdPauta(String idPauta) {
-        this.idPauta = idPauta;
-        return this;
+    public Pauta getPauta() {
+        return pauta;
     }
 
-    public String getCpfAssociado() {
-        return getIdAssociado();
+    public void setPauta(Pauta pauta) {
+        this.pauta = pauta;
     }
 
-    public VotoAssembleia setIdAssociado(String idAssociado) {
-        this.idAssociado = idAssociado;
-        return this;
+    public Associado getAssociado() {
+        return associado;
     }
 
-    public String getVoto() {
+    public void setAssociado(Associado associado) {
+        this.associado = associado;
+    }
+
+    public Voto getVoto() {
         return voto;
     }
 
-    public VotoAssembleia setVoto(String voto) {
+    public void setVoto(Voto voto) {
         this.voto = voto;
-        return this;
     }
 
     public OffsetDateTime getHorarioVoto() {
         return horarioVoto;
     }
 
+    public void setHorarioVoto(OffsetDateTime horarioVoto) {
+        this.horarioVoto = horarioVoto;
+    }
 }

@@ -1,7 +1,11 @@
 package com.cooperativismo.domain.model;
 
+import com.cooperativismo.domain.enums.StatusSessao;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 import java.time.OffsetDateTime;
@@ -13,7 +17,9 @@ public class Pauta {
     private String id;
     @NotBlank
     private String descricao;
-    private boolean statusSessao;
+    @Enumerated(EnumType.STRING)
+    private StatusSessao statusSessao;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private OffsetDateTime horaAberturaAssembleia;
     private int minutosDeDuracaoDaSessao;
 
@@ -28,35 +34,12 @@ public class Pauta {
         return id;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public String getDescricao() {
         return descricao;
-    }
-
-    public boolean isSessaoAberta() {
-        return statusSessao;
-    }
-
-    public Pauta setStatusSessao(boolean statusSessao) {
-        this.statusSessao = statusSessao;
-        return this;
-    }
-
-    public OffsetDateTime getHoraAberturaAssembleia() {
-        return horaAberturaAssembleia;
-    }
-
-    public Pauta setHoraAberturaAssembleia(OffsetDateTime horaAberturaAssembleia) {
-        this.horaAberturaAssembleia = horaAberturaAssembleia;
-        return this;
-    }
-
-    public int getMinutosDeDuracaoDaSessao() {
-        return minutosDeDuracaoDaSessao;
-    }
-
-    public Pauta setMinutosDeDuracaoDaSessao(int minutosDeDuracaoDaSessao) {
-        this.minutosDeDuracaoDaSessao = minutosDeDuracaoDaSessao;
-        return this;
     }
 
     public Pauta setDescricao(String descricao) {
@@ -64,8 +47,27 @@ public class Pauta {
         return this;
     }
 
-    public void iniciaAssembleia() {
-        setHoraAberturaAssembleia(OffsetDateTime.now())
-                .setStatusSessao(true);
+    public StatusSessao getStatusSessao() {
+        return statusSessao;
+    }
+
+    public void setStatusSessao(StatusSessao statusSessao) {
+        this.statusSessao = statusSessao;
+    }
+
+    public OffsetDateTime getHoraAberturaAssembleia() {
+        return horaAberturaAssembleia;
+    }
+
+    public void setHoraAberturaAssembleia(OffsetDateTime horaAberturaAssembleia) {
+        this.horaAberturaAssembleia = horaAberturaAssembleia;
+    }
+
+    public int getMinutosDeDuracaoDaSessao() {
+        return minutosDeDuracaoDaSessao;
+    }
+
+    public void setMinutosDeDuracaoDaSessao(int minutosDeDuracaoDaSessao) {
+        this.minutosDeDuracaoDaSessao = minutosDeDuracaoDaSessao;
     }
 }

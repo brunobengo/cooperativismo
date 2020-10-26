@@ -1,7 +1,7 @@
 package com.cooperativismo.domain.service;
 
 import com.cooperativismo.api.model.ResultadoVotacaoDTO;
-import com.cooperativismo.api.model.VotoAssembleiaModel;
+import com.cooperativismo.domain.enums.StatusSessao;
 import com.cooperativismo.domain.exceptions.NegocioException;
 import com.cooperativismo.domain.repository.AssociadoRepository;
 import com.cooperativismo.domain.repository.PautaRepository;
@@ -22,16 +22,12 @@ import java.util.List;
 @Service
 public class VotoAssembleiaService {
 
-    final VotoAssembleiaRepository votoAssembleiaRepository;
-
     @Autowired
-    private AssociadoRepository associadoRepository;
+    private VotoAssembleiaRepository votoAssembleiaRepository;
     @Autowired
     private PautaRepository pautaRepository;
-
-    public VotoAssembleiaService(VotoAssembleiaRepository votoAssembleiaRepository) {
-        this.votoAssembleiaRepository = votoAssembleiaRepository;
-    }
+    @Autowired
+    private AssociadoRepository associadoRepository;
 
     public List<VotoAssembleia> findAll() {
         return votoAssembleiaRepository.findAll();
@@ -45,21 +41,23 @@ public class VotoAssembleiaService {
         return votoAssembleiaRepository.existeVotoDoAssociadoNaPauta(idAssociado, idPauta);
     }
 
-    public VotoAssembleia adicionaVoto(VotoAssembleiaModel votoAssembleiaModel) throws IOException, JSONException {
-        if(associadoDesabilitadoParaVoto(votoAssembleiaModel.getIdAssociado())){
+    public VotoAssembleia adicionaVoto(VotoAssembleia votoAssembleia) throws IOException, JSONException {
+        Associado associado = associadoRepository.findById(votoAssembleia.getAssociado().getId())
+                .orElseThrow(() -> new NegocioException("Associado não localizado"));
+        votoAssembleia.setAssociado(associado);
+        Pauta pauta = pautaRepository.findById(votoAssembleia.getPauta().getId())
+                .orElseThrow(() -> new NegocioException("Pauta não localizada"));
+        votoAssembleia.setPauta(pauta);
+        if(associadoDesabilitadoParaVoto(votoAssembleia.getAssociado().getId())){
             throw new NegocioException("Associado está desabilitado para voto.");
-        }else if(associadoJaVotouNaPauta(votoAssembleiaModel.getIdAssociado(), votoAssembleiaModel.getIdPauta())){
+        }else if(associadoJaVotouNaPauta(votoAssembleia.getAssociado().getId(), votoAssembleia.getPauta().getId())){
             throw new NegocioException("Associado já votou na pauta.");
-        }else if(pautaJaFechou(votoAssembleiaModel.getIdPauta())) {
+        }else if(pautaJaFechou(votoAssembleia.getPauta().getId())) {
             throw new NegocioException("Pauta está fechada.");
-        }else if(pautaIsInativa(votoAssembleiaModel.getIdPauta())){
+        }else if(pautaIsInativa(votoAssembleia.getPauta().getId())){
             throw new NegocioException("Pauta foi fechada por inatividade.");
         }else{
-            VotoAssembleia votoAssembleia = new VotoAssembleia()
-                    .setIdPauta(votoAssembleiaModel.getIdPauta())
-                    .setIdAssociado(votoAssembleiaModel.getIdAssociado())
-                    .setHorarioVoto(OffsetDateTime.now())
-                    .setVoto(votoAssembleiaModel.isConfirma() ? "Sim" : "Não");
+            votoAssembleia.setHorarioVoto(OffsetDateTime.now());
             return votoAssembleiaRepository.save(votoAssembleia);
         }
     }
@@ -78,7 +76,7 @@ public class VotoAssembleiaService {
         OffsetDateTime horarioUltimaVotacao = horarioUltimaVotacao(pauta.getId());
         boolean isInativa = OffsetDateTime.now().minusMinutes(1).isAfter(horarioUltimaVotacao);
         if(isInativa){
-            pauta.setStatusSessao(false);
+            pauta.setStatusSessao(StatusSessao.FECHADA);
             pautaRepository.save(pauta);
         }
         return isInativa;
@@ -86,12 +84,15 @@ public class VotoAssembleiaService {
 
     private boolean pautaJaFechou(String idPauta) {
         Pauta pauta = pautaRepository.findById(idPauta)
-                .orElseThrow(() -> new NegocioException("Pauta não encontrda"));
+                .orElseThrow(() -> new NegocioException("Pauta não encontrada"));
+        if(pauta.getHoraAberturaAssembleia() == null){
+            throw new NegocioException("Assembleia não aberta");
+        }
         OffsetDateTime momentoDeFechamentoDaSecao =
                 pauta.getHoraAberturaAssembleia().plusMinutes(pauta.getMinutosDeDuracaoDaSessao());
         boolean jaFechou = OffsetDateTime.now().isAfter(momentoDeFechamentoDaSecao);
         if(jaFechou){
-            pauta.setStatusSessao(false);
+            pauta.setStatusSessao(StatusSessao.FECHADA);
             pautaRepository.save(pauta);
         }
         return jaFechou;

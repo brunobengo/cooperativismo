@@ -33,7 +33,7 @@ public class AssociadoTests {
     @Test
     public void saveSuccessTest() {
         when(associadoRepository.save(eq(associadoMock))).thenReturn(associadoMock);
-        Associado associadoRetornada = associadoService.save(associadoMock);
+        Associado associadoRetornada = associadoRepository.save(associadoMock);
         assertEquals(associadoMock, associadoRetornada);
         verify(associadoRepository).save(eq(associadoMock));
     }
