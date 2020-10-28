@@ -7,6 +7,7 @@ import org.json.JSONException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,22 +36,24 @@ public class VotoAssembleiaController {
     }
 
 
-    @PostMapping(path = "/v1/novovoto")
+    @PostMapping(path = "/novovoto")
     @ResponseStatus(HttpStatus.CREATED)
     public VotoAssembleia novovoto(@Validated @RequestBody VotoAssembleia votoAssembleia) throws IOException, JSONException {
         return votoAssembleiaService.adicionaVoto(votoAssembleia);
     }
 
-//    @GetMapping(path = "/v1/resultado/{id}")
+    @DeleteMapping("/{votoAssembleiaId}")
+    public ResponseEntity<Void> remover(@PathVariable String votoAssembleiaId) {
+        if (!votoAssembleiaRepository.existsById(votoAssembleiaId)) {
+            return ResponseEntity.notFound().build();
+        }
+        votoAssembleiaRepository.deleteById(votoAssembleiaId);
+        return ResponseEntity.noContent().build();
+    }
+
+    //TODO arrumar isso aii
+//    @GetMapping(path = "/resultado/{id}")
 //    public ResponseEntity<ResultadoVotacaoDTO> resultado(@PathVariable String id) {
 //        return ResponseEntity.ok(votoAssembleiaService.totalVotos(id));
-//    }
-//
-//    private VotoAssembleiaModel toModel(VotoAssembleia votoAssembleia) {
-//        return modelMapper.map(votoAssembleia, VotoAssembleiaModel.class);
-//    }
-//
-//    private VotoAssembleia toEntity(VotoAssembleiaModel votoAssembleiaModel) {
-//        return modelMapper.map(votoAssembleiaModel, VotoAssembleia.class);
 //    }
 }

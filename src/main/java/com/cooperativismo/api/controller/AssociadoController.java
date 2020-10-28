@@ -28,7 +28,7 @@ public class AssociadoController {
         return toCollectionModel(associadoRepository.findAll());
     }
 
-    @PostMapping(path = "/v1/novoassociado")
+    @PostMapping(path = "/novoassociado")
     @ResponseStatus(HttpStatus.CREATED)
     public Associado novoassociado(@Valid @RequestBody Associado associado) {
         return toModel(associadoRepository.save(associado));
@@ -44,6 +44,15 @@ public class AssociadoController {
         }
 
         return ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/{associadoId}")
+    public ResponseEntity<Void> remover(@PathVariable String associadoId) {
+        if (!associadoRepository.existsById(associadoId)) {
+            return ResponseEntity.notFound().build();
+        }
+        associadoRepository.deleteById(associadoId);
+        return ResponseEntity.noContent().build();
     }
 
     private Associado toModel(Associado associado) {

@@ -1,6 +1,8 @@
 package com.cooperativismo.api.controller;
 
 //import com.cooperativismo.api.model.PautaModel;
+
+import com.cooperativismo.domain.model.Associado;
 import com.cooperativismo.domain.model.Pauta;
 import com.cooperativismo.domain.repository.PautaRepository;
 import com.cooperativismo.domain.service.PautaService;
@@ -12,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/pauta")
@@ -35,13 +37,13 @@ public class PautaController {
         return pautaRepository.findAll();
     }
 
-    @PostMapping(path = "/v1/novapauta")
+    @PostMapping(path = "/novapauta")
     @ResponseStatus(HttpStatus.CREATED)
     public Pauta novapauta(@Valid @RequestBody Pauta pauta) {
         return pautaRepository.save(pauta);
     }
 
-    @PutMapping("/v1/iniciaassembleia")
+    @PutMapping("/iniciaassembleia")
     public ResponseEntity<Pauta> iniciaassembleia(@RequestBody Pauta pauta) {
         if (!pautaRepository.existsById(pauta.getId())) {
             return ResponseEntity.notFound().build();
@@ -50,17 +52,28 @@ public class PautaController {
         return ResponseEntity.ok(pauta);
     }
 
-//    private PautaModel toModel(Pauta pauta) {
-//        return modelMapper.map(pauta, PautaModel.class);
-//    }
-//
-//    private List<PautaModel> toCollectionModel(List<Pauta> pautas) {
-//        return pautas.stream()
-//                .map(pauta -> toModel(pauta))
-//                .collect(Collectors.toList());
-//    }
-//
-//    private Pauta toEntity(PautaModel pautaModel) {
-//        return modelMapper.map(pautaModel, Pauta.class);
-//    }
+    @GetMapping("/{pautaId}")
+    public ResponseEntity<Pauta> buscar(@PathVariable String pautaId) {
+        Optional<Pauta> pauta = pautaRepository.findById(pautaId);
+
+        if (pauta.isPresent()) {
+            Pauta Pauta = toModel(pauta.get());
+            return ResponseEntity.ok(Pauta);
+        }
+
+        return ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/{pautaId}")
+    public ResponseEntity<Void> remover(@PathVariable String pautaId) {
+        if (!pautaRepository.existsById(pautaId)) {
+            return ResponseEntity.notFound().build();
+        }
+        pautaRepository.deleteById(pautaId);
+        return ResponseEntity.noContent().build();
+    }
+
+    private Pauta toModel(Pauta pauta) {
+        return modelMapper.map(pauta, Pauta.class);
+    }
 }

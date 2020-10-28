@@ -40,7 +40,7 @@ public class PautaControllerTests {
     public void criaPautaTest() throws Exception {
         Pauta pauta = new Pauta("Pauta teste");
         when(pautaRepository.save(any(Pauta.class))).thenReturn(pauta);
-        mockMvc.perform(post("/pauta/v1/novapauta")
+        mockMvc.perform(post("/pauta/novapauta")
                 .content(mapper.writeValueAsString(pauta))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful());

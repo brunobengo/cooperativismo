@@ -41,7 +41,7 @@ public class AssociadoControllerTests {
     public void novoAssociadoService() throws Exception {
         Associado associado = new Associado("12022203323");
         when(associadoRepository.save(any(Associado.class))).thenReturn(associado);
-        mockMvc.perform(post("/associado/v1/novoassociado")
+        mockMvc.perform(post("/associado/novoassociado")
                 .content(mapper.writeValueAsString(associado))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().is2xxSuccessful());
