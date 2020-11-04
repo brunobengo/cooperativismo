@@ -4,6 +4,7 @@ import com.cooperativismo.api.model.ResultadoVotacaoDTO;
 import org.json.JSONException;
 
 import java.time.OffsetDateTime;
+import java.util.Optional;
 
 public interface VotoAssembleiaRepositoryQuery {
 
@@ -11,5 +12,5 @@ public interface VotoAssembleiaRepositoryQuery {
 
     OffsetDateTime horarioUltimaVotacao(String idPauta);
 
-    ResultadoVotacaoDTO totalvotos(String idPauta) throws JSONException;
+    Optional<ResultadoVotacaoDTO> totalvotos(String idPauta) throws JSONException;
 }

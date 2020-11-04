@@ -39,24 +39,27 @@ public class VotoAssembleia {
         return pauta;
     }
 
-    public void setPauta(Pauta pauta) {
+    public VotoAssembleia setPauta(Pauta pauta) {
         this.pauta = pauta;
+        return this;
     }
 
     public Associado getAssociado() {
         return associado;
     }
 
-    public void setAssociado(Associado associado) {
+    public VotoAssembleia setAssociado(Associado associado) {
         this.associado = associado;
+        return this;
     }
 
     public Voto getVoto() {
         return voto;
     }
 
-    public void setVoto(Voto voto) {
+    public VotoAssembleia setVoto(Voto voto) {
         this.voto = voto;
+        return this;
     }
 
     public OffsetDateTime getHorarioVoto() {

@@ -14,6 +14,7 @@ import org.springframework.data.mongodb.core.query.Query;
 
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Optional;
 
 
 public class VotoAssembleiaRepositoryQueryImpl implements VotoAssembleiaRepositoryQuery {
@@ -46,12 +47,12 @@ public class VotoAssembleiaRepositoryQueryImpl implements VotoAssembleiaReposito
     }
 
     @Override
-    public ResultadoVotacaoDTO totalvotos(String idPauta) throws JSONException {
+    public Optional<ResultadoVotacaoDTO> totalvotos(String idPauta) throws JSONException {
         ResultadoVotacaoDTO resultadoVotacaoDTO = new ResultadoVotacaoDTO() ;
         resultadoVotacaoDTO.setIdPauta(idPauta);
         resultadoVotacaoDTO.setVotosSim(getVotos(idPauta, Voto.SIM));
         resultadoVotacaoDTO.setVotosNao(getVotos(idPauta, Voto.NÃO));
-        return resultadoVotacaoDTO;
+        return Optional.of(resultadoVotacaoDTO);
     }
 
     private int getVotos(String idPauta, Voto tipoVoto) throws JSONException {

@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 import java.time.OffsetDateTime;
+import java.util.Optional;
 
 @Repository
 public interface VotoAssembleiaRepository extends MongoRepository<VotoAssembleia, String>, VotoAssembleiaRepositoryQuery {
@@ -17,5 +18,6 @@ public interface VotoAssembleiaRepository extends MongoRepository<VotoAssembleia
     OffsetDateTime horarioUltimaVotacao(String idPauta);
 
     @Override
-    ResultadoVotacaoDTO totalvotos(String idPauta);
+    Optional<ResultadoVotacaoDTO> totalvotos(String idPauta);
+
 }

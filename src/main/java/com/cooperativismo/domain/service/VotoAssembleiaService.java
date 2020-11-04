@@ -17,7 +17,9 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.time.OffsetDateTime;
+import java.time.Period;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class VotoAssembleiaService {
@@ -66,7 +68,7 @@ public class VotoAssembleiaService {
         return votoAssembleiaRepository.horarioUltimaVotacao(idPauta);
     }
 
-    public ResultadoVotacaoDTO totalVotos(String idPauta){
+    public Optional<ResultadoVotacaoDTO> totalVotos(String idPauta){
         return votoAssembleiaRepository.totalvotos(idPauta);
     }
 

@@ -53,7 +53,7 @@ public class VotoAssembleiaTests {
     @Test
     public void totalVotosTest() throws Exception {
         ResultadoVotacaoDTO resultadoVotacaoDTO = new ResultadoVotacaoDTO().setVotosNao(1).setVotosSim(2);
-        when(votoAssembleiaService.totalVotos(id)).thenReturn(resultadoVotacaoDTO);
+        when(votoAssembleiaService.totalVotos(id).get()).thenReturn(resultadoVotacaoDTO);
 
         mockMvc.perform(get((String.format("%s/%s", "/assembleia/resultado", id))))
                 .andExpect(status().is2xxSuccessful())

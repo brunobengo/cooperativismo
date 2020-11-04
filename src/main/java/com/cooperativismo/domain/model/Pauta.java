@@ -34,8 +34,9 @@ public class Pauta {
         return id;
     }
 
-    public void setId(String id) {
+    public Pauta setId(String id) {
         this.id = id;
+        return this;
     }
 
     public String getDescricao() {
@@ -51,8 +52,9 @@ public class Pauta {
         return statusSessao;
     }
 
-    public void setStatusSessao(StatusSessao statusSessao) {
+    public Pauta setStatusSessao(StatusSessao statusSessao) {
         this.statusSessao = statusSessao;
+        return this;
     }
 
     public OffsetDateTime getHoraAberturaAssembleia() {
