@@ -30,6 +30,18 @@ public class VotoAssembleiaController {
         this.votoAssembleiaService = votoAssembleiaService;
     }
 
+    @GetMapping
+    @ResponseBody
+    public String getAll() {//List<VotoAssembleia> listar() {
+        return "OK";
+//        return votoAssembleiaRepository.findAll();
+    }
+
+    @PostMapping
+    public ResponseEntity<VotoAssembleia> save(VotoAssembleia votoAssembleia) {
+        return ResponseEntity.status(HttpStatus.OK).body(votoAssembleia);
+    }
+
     @GetMapping("/")
     public List<VotoAssembleia> listar() {
         return votoAssembleiaRepository.findAll();
